@@ -9,13 +9,15 @@ from geoip import geolite2
 def reverse_dns(ip):
     result_ip = re.sub('\/.*',"",ip)
     result_addr = reversename.from_address(result_ip)
+    resolver.timeout = 30
+    resolver.lifetime = 30
     result_record = resolver.query(result_addr, "PTR")[0]
     return result_record
 
-def notification_slack(ip, result_record):
+def notification_slack(ip):
     url = os.environ.get('SLACK_WEBHOOK_URL')
     title = ':warning:  本番ALBでDoS攻撃を検知しました！！！:warning: '
-    text = "遮断したアクセス元 ```%s\n%s``` " % (ip, result_record)
+    text = "遮断したアクセス元 ```%s\n``` " % (ip)
     color = 'danger'
 
     payload = {
@@ -43,5 +45,5 @@ def lambda_handler(event, context):
     dict_ip = response.get("ManagedKeys")
     for ip in dict_ip:
         print(ip)
-        result_record = reverse_dns(ip)
-        notification_slack(ip, result_record)
+        notification_slack(ip)
+
