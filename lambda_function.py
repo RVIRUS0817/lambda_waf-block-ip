@@ -4,7 +4,6 @@ import os
 import requests
 import re
 from dns import reversename,resolver
-from geoip import geolite2
 
 def reverse_dns(ip):
     result_ip = re.sub('\/.*',"",ip)
@@ -29,8 +28,8 @@ def notification_slack(ip, result_record):
             }
         ]
     }
-     headers = {'content-type': 'application/json'}
-     requests.post(url, data=json.dumps(payload), headers=headers)
+    headers = {'content-type': 'application/json'}
+    requests.post(url, data=json.dumps(payload), headers=headers)
 
 def lambda_handler(event, context):
     ruleid = os.environ.get('RULEID')

@@ -2,4 +2,3 @@ beautifulsoup4
 dnspython3 
 requests
 python-geoip
-python-geoip-geolite2
